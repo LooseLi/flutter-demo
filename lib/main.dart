@@ -14,7 +14,83 @@ class MyApp extends StatelessWidget {
           title: const Text('导航栏标题'),
         ),
         // body: const ContentWidget(),
-        body: const UserInfoWidget(),
+        // body: const UserInfoWidget(),
+        body: const InfoFormWidget(),
+      ),
+    );
+  }
+}
+
+// Widget Form表单
+class InfoFormWidget extends StatefulWidget {
+  const InfoFormWidget({Key? key}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() {
+    return InfoFormWidgetState();
+  }
+}
+
+class InfoFormWidgetState extends State<InfoFormWidget> {
+  String username = '';
+  String password = '';
+
+  GlobalKey<FormState> formGlobalKey = GlobalKey();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(20),
+      child: Form(
+        key: formGlobalKey,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextFormField(
+              decoration: const InputDecoration(
+                icon: Icon(Icons.people),
+                labelText: '请输入用户名',
+              ),
+              onSaved: (value) {
+                username = value ?? '';
+              },
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return '用户名不能为空';
+                }
+                return null;
+              },
+            ),
+            TextFormField(
+              obscureText: true,
+              decoration: const InputDecoration(
+                icon: Icon(Icons.lock),
+                labelText: '请输入密码',
+              ),
+              onSaved: (value) {
+                password = value ?? '';
+              },
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return '密码不能为空';
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: 12),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton(
+                onPressed: () {
+                  formGlobalKey.currentState?.save();
+                  formGlobalKey.currentState?.validate();
+                  print('用户名: $username, 密码: $password');
+                },
+                child: const Text('注册'),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
