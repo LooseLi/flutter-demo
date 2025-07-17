@@ -12,43 +12,20 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(
           title: const Text('导航栏标题'),
         ),
-        body: const ContentWidget(),
+        body: ContentWidget(),
       ),
     );
   }
 }
 
-// class ContentWidget extends StatelessWidget {
-//   const ContentWidget({Key? key}) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return const Center(
-//         child: Column(
-//       mainAxisAlignment: MainAxisAlignment.center,
-//       children: [
-//         TextButton(
-//           onPressed: () {},
-//           child: Text('计数+1'),
-//         ),
-//         Text(
-//           'Hello Flutter',
-//           textDirection: TextDirection.ltr,
-//           style: TextStyle(
-//             fontSize: 24,
-//             color: Colors.red,
-//           ),
-//         ),
-//       ],
-//     ));
-//   }
-// }
-
 class ContentWidget extends StatefulWidget {
-  const ContentWidget({Key? key}) : super(key: key);
+  ContentWidget() {
+    print('ContentWidget的构造函数被调用');
+  }
 
   @override
   State<StatefulWidget> createState() {
+    print('ContentWidget的createState被调用');
     return ContentWidgetState();
   }
 }
@@ -56,42 +33,47 @@ class ContentWidget extends StatefulWidget {
 class ContentWidgetState extends State<ContentWidget> {
   int counter = 0;
 
+  ContentWidgetState() {
+    print('ContentWidgetState的构造函数被调用');
+  }
+
+  @override
+  // 初始化操作，经常使用
+  void initState() {
+    super.initState();
+    print('ContentWidgetState的initState被调用');
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    print('ContentWidgetState的didChangeDependencies被调用');
+  }
+
+  @override
+  // 父类状态发生改变时，才会调用该方法
+  void didUpdateWidget(covariant ContentWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    print('ContentWidgetState的didUpdateWidget被调用');
+  }
+
   @override
   Widget build(BuildContext context) {
+    print('ContentWidgetState的build被调用');
     return Center(
-        child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextButton(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          TextButton(
               onPressed: () {
                 setState(() {
                   counter++;
                 });
               },
-              child: const Text('计数+1'),
-            ),
-            TextButton(
-              onPressed: () {
-                setState(() {
-                  counter--;
-                });
-              },
-              child: const Text('计数-1'),
-            ),
-          ],
-        ),
-        Text(
-          '当前计数: $counter',
-          textDirection: TextDirection.ltr,
-          style: const TextStyle(
-            fontSize: 24,
-            color: Colors.red,
-          ),
-        ),
-      ],
-    ));
+              child: const Text('+1')),
+          Text('计数: $counter', style: const TextStyle(fontSize: 24)),
+        ],
+      ),
+    );
   }
 }
