@@ -30,7 +30,7 @@ class ContentWidget extends StatelessWidget {
   }
 }
 
-// Widget Text
+// Widget Button
 class ButtonDemo extends StatelessWidget {
   const ButtonDemo({Key? key}) : super(key: key);
 
