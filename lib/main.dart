@@ -26,7 +26,51 @@ class ContentWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     // return const TextDemo();
     // return const TextRichDemo();
-    return const ButtonDemo();
+    // return const ButtonDemo();
+    // return const ImageNetworkDemo();
+    return const ImageAssetDemo();
+  }
+}
+
+// Widget Image.asset
+class ImageAssetDemo extends StatelessWidget {
+  const ImageAssetDemo({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        width: 200,
+        height: 200,
+        color: Colors.red,
+        child: Image.asset(
+          'assets/images/header.jpg',
+          // fit: BoxFit.cover, // Image的填充模式
+          // repeat: ImageRepeat.repeatY, // Image重复
+        ),
+      ),
+    );
+  }
+}
+
+// Widget Image.network
+class ImageNetworkDemo extends StatelessWidget {
+  const ImageNetworkDemo({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        width: 200,
+        height: 200,
+        color: Colors.red,
+        child: Image.network(
+          'https://img.beingfine.cn/Channel/i_10331310018_opt.png',
+          fit: BoxFit.cover, // Image的填充模式
+          // repeat: ImageRepeat.repeatY, // Image重复
+        ),
+      ),
+    );
   }
 }
 

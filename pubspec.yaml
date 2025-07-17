@@ -19,3 +19,6 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  assets:
+    - assets/images/header.jpg # 确保路径正确，且行首有两个空格缩进
