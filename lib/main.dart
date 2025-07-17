@@ -28,7 +28,44 @@ class ContentWidget extends StatelessWidget {
     // return const TextRichDemo();
     // return const ButtonDemo();
     // return const ImageNetworkDemo();
-    return const ImageAssetDemo();
+    // return const ImageAssetDemo();
+    // return const ImageClipOvalDemo();
+    return const ImageClipRRectDemo();
+  }
+}
+
+// Widget ClipRRect 圆角图片
+class ImageClipRRectDemo extends StatelessWidget {
+  const ImageClipRRectDemo({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12), // 圆角大小
+        child: Image.network(
+          'https://img.beingfine.cn/Channel/i_16335410014_opt.jpg',
+          width: 100,
+          height: 100,
+        ),
+      ),
+    );
+  }
+}
+
+// Widget ClipOval 圆形图片(圆形头像)
+class ImageClipOvalDemo extends StatelessWidget {
+  const ImageClipOvalDemo({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipOval(
+      child: Image.network(
+        'https://img.beingfine.cn/Channel/i_16335410014_opt.jpg',
+        width: 100,
+        height: 100,
+      ),
+    );
   }
 }
 
