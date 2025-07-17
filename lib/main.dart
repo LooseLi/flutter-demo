@@ -14,23 +14,23 @@ class MyApp extends StatelessWidget {
           title: const Text('导航栏标题'),
         ),
         // body: const ContentWidget(),
-        body: userInfoWidget(),
+        body: const UserInfoWidget(),
       ),
     );
   }
 }
 
 // Widget TextField 输入框
-class userInfoWidget extends StatefulWidget {
-  // const userInfoWidget({Key? key}) : super(key: key);
+class UserInfoWidget extends StatefulWidget {
+  const UserInfoWidget({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return userInfoWidgetState();
+    return UserInfoWidgetState();
   }
 }
 
-class userInfoWidgetState extends State<userInfoWidget> {
+class UserInfoWidgetState extends State<UserInfoWidget> {
   final textEditingController = TextEditingController();
 
   @override
