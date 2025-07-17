@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// Text组件
 main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
@@ -12,68 +13,58 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(
           title: const Text('导航栏标题'),
         ),
-        body: ContentWidget(),
+        body: const ContentWidget(),
       ),
     );
   }
 }
 
-class ContentWidget extends StatefulWidget {
-  ContentWidget() {
-    print('ContentWidget的构造函数被调用');
-  }
-
-  @override
-  State<StatefulWidget> createState() {
-    print('ContentWidget的createState被调用');
-    return ContentWidgetState();
-  }
-}
-
-class ContentWidgetState extends State<ContentWidget> {
-  int counter = 0;
-
-  ContentWidgetState() {
-    print('ContentWidgetState的构造函数被调用');
-  }
-
-  @override
-  // 初始化操作，经常使用
-  void initState() {
-    super.initState();
-    print('ContentWidgetState的initState被调用');
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    print('ContentWidgetState的didChangeDependencies被调用');
-  }
-
-  @override
-  // 父类状态发生改变时，才会调用该方法
-  void didUpdateWidget(covariant ContentWidget oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    print('ContentWidgetState的didUpdateWidget被调用');
-  }
+class ContentWidget extends StatelessWidget {
+  const ContentWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    print('ContentWidgetState的build被调用');
-    return Center(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          TextButton(
-              onPressed: () {
-                setState(() {
-                  counter++;
-                });
-              },
-              child: const Text('+1')),
-          Text('计数: $counter', style: const TextStyle(fontSize: 24)),
-        ],
-      ),
+    // return const TextDemo();
+    return const TextRichDemo();
+  }
+}
+
+// Widget Text
+class TextDemo extends StatelessWidget {
+  const TextDemo({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Text(
+      '这是一段很长的文本文案，请你看完;这是一段很长的文本文案，请你看完;这是一段很长的文本文案，请你看完;这是一段很长的文本文案，请你看完',
+      style: TextStyle(fontSize: 20, color: Color(0xFFDE7953)),
+      textAlign: TextAlign.center, // 文本对齐方式
+      maxLines: 1, // 最大显示行数
+      overflow: TextOverflow.ellipsis, // 超出部分显示方式
+    );
+  }
+}
+
+// Widget Text.rich
+class TextRichDemo extends StatelessWidget {
+  const TextRichDemo({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Text.rich(
+      TextSpan(children: [
+        TextSpan(
+          text: '《三体》',
+          style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+        ),
+        TextSpan(
+            text: '刘慈欣',
+            style: TextStyle(fontSize: 20, color: Colors.blueAccent)),
+        TextSpan(
+            text: '\n主要内容主要内容主要内容主要内容主要内容主要内容\n主要内容主要内容主要内容主要内容主要内容',
+            style: TextStyle(fontSize: 24, color: Colors.brown))
+      ]),
+      textAlign: TextAlign.center,
     );
   }
 }
