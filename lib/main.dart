@@ -13,7 +13,57 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(
           title: const Text('导航栏标题'),
         ),
-        body: const ContentWidget(),
+        // body: const ContentWidget(),
+        body: userInfoWidget(),
+      ),
+    );
+  }
+}
+
+// Widget TextField 输入框
+class userInfoWidget extends StatefulWidget {
+  // const userInfoWidget({Key? key}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() {
+    return userInfoWidgetState();
+  }
+}
+
+class userInfoWidgetState extends State<userInfoWidget> {
+  final textEditingController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    textEditingController.text = '默认值';
+    textEditingController.addListener(() {
+      print('监听事件: ${textEditingController.text}');
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        children: [
+          TextField(
+            decoration: const InputDecoration(
+                icon: Icon(Icons.people),
+                labelText: 'username',
+                hintText: '请输入用户名',
+                border: OutlineInputBorder(borderSide: BorderSide(width: 3))),
+            onChanged: (value) {
+              print('当前值：$value');
+            },
+            onSubmitted: (value) {
+              print('当前值：$value'); // 手机键盘按下完成done键触发
+            },
+            controller: textEditingController, // 监听事件
+          )
+        ],
       ),
     );
   }
