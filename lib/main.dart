@@ -25,7 +25,32 @@ class ContentWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // return const TextDemo();
-    return const TextRichDemo();
+    // return const TextRichDemo();
+    return const ButtonDemo();
+  }
+}
+
+// Widget Text
+class ButtonDemo extends StatelessWidget {
+  const ButtonDemo({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        ElevatedButton(
+            onPressed: () => print('ElevatedButton'),
+            child: const Text('ElevatedButton')),
+        OutlinedButton(
+            onPressed: () => print('OutlinedButton'),
+            child: const Text('OutlinedButton')),
+        IconButton(
+            onPressed: () => print('IconButton'), icon: const Icon(Icons.add)),
+        FloatingActionButton(
+            onPressed: () => print('FloatingActionButton'),
+            child: const Text('FloatingActionButton')),
+      ],
+    );
   }
 }
 
