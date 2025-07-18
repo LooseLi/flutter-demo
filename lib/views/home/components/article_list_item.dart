@@ -48,11 +48,7 @@ class ArticleListItem extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start, // 交叉轴
       children: [
         avatarWidget(),
-        Expanded(
-          // 占据剩余空间
-          child: Text('2'),
-        ),
-        Text('3'),
+        getDetailWidget(),
         iconWidget(),
       ],
     );
@@ -62,12 +58,41 @@ class ArticleListItem extends StatelessWidget {
   Widget avatarWidget() {
     return ClipRRect(
         borderRadius: BorderRadius.circular(6),
-        child: Image.network(item.author.avatar, width: 60));
+        child: Image.network(
+          item.author.avatar,
+          width: 60,
+          height: 60,
+          fit: BoxFit.cover,
+        ));
   }
 
+  // 详情 Widget
+  Widget getDetailWidget() {
+    return Expanded(
+      // Expanded: 占据剩余空间
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text("文章: ${item.content.title}",
+                style:
+                    const TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+            const SizedBox(height: 3),
+            Text('作者: ${item.author.name}',
+                style: const TextStyle(fontSize: 12)),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // 图标 Widget
   Widget iconWidget() {
     return Container(
-      padding: const EdgeInsets.fromLTRB(10, 4, 10, 0),
+      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+      decoration: const BoxDecoration(
+          border: Border(left: BorderSide(width: 1, color: Colors.grey))),
       child: const Column(
         children: [Icon(Icons.search), Text('搜索')],
       ),
