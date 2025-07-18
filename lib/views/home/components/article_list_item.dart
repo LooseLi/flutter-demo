@@ -20,7 +20,7 @@ class ArticleListItem extends StatelessWidget {
           const SizedBox(height: 12),
           Text('2'),
           const SizedBox(height: 12),
-          Text('3'),
+          getUserIdWidget(),
         ],
       ),
     );
@@ -38,6 +38,22 @@ class ArticleListItem extends StatelessWidget {
         "No.${item.rank}",
         style: const TextStyle(
             fontSize: 14, color: Color.fromARGB(255, 131, 95, 36)),
+      ),
+    );
+  }
+
+  // user_id Widget
+  Widget getUserIdWidget() {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      width: double.infinity, // 占满一行
+      decoration: BoxDecoration(
+        color: const Color(0xffeeeeee),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Text(
+        item.author.userId,
+        style: const TextStyle(fontSize: 14, color: Colors.black54),
       ),
     );
   }
