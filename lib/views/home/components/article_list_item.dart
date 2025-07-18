@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/models/home_model.dart';
+import 'package:flutter_demo/components/dashed_line.dart';
 
 class ArticleListItem extends StatelessWidget {
   late ArticleItem item;
@@ -49,12 +50,13 @@ class ArticleListItem extends StatelessWidget {
       children: [
         avatarWidget(),
         getDetailWidget(),
+        getDashedLineWidget(),
         iconWidget(),
       ],
     );
   }
 
-  // 头像 Widget
+  // 作者头像 Widget
   Widget avatarWidget() {
     return ClipRRect(
         borderRadius: BorderRadius.circular(6),
@@ -66,7 +68,7 @@ class ArticleListItem extends StatelessWidget {
         ));
   }
 
-  // 详情 Widget
+  // 内容详情 Widget
   Widget getDetailWidget() {
     return Expanded(
       // Expanded: 占据剩余空间
@@ -89,19 +91,31 @@ class ArticleListItem extends StatelessWidget {
     );
   }
 
-  // 图标 Widget
+  // 虚线组件 Widget
+  Widget getDashedLineWidget() {
+    return const SizedBox(
+      width: 1,
+      height: 60,
+      child: DashedLine(
+        axis: Axis.vertical,
+        height: 5,
+        count: 8,
+        color: Color(0xffaaaaaa),
+      ),
+    );
+  }
+
+  // 搜索图标 Widget
   Widget iconWidget() {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-      decoration: const BoxDecoration(
-          border: Border(left: BorderSide(width: 1, color: Colors.grey))),
       child: const Column(
         children: [Icon(Icons.search), Text('搜索')],
       ),
     );
   }
 
-  // user_id Widget
+  // 底部文章标题显示区 Widget
   Widget getUserIdWidget() {
     return Container(
       padding: const EdgeInsets.all(12),
