@@ -76,6 +76,8 @@ class ArticleListItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text("文章: ${item.content.title}",
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style:
                     const TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
             const SizedBox(height: 3),
@@ -109,7 +111,7 @@ class ArticleListItem extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
       ),
       child: Text(
-        item.author.userId,
+        item.content.title,
         style: const TextStyle(fontSize: 14, color: Colors.black54),
       ),
     );
