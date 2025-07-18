@@ -18,7 +18,7 @@ class ArticleListItem extends StatelessWidget {
         children: [
           getRankWidget(),
           const SizedBox(height: 12),
-          Text('2'),
+          getContentWidget(),
           const SizedBox(height: 12),
           getUserIdWidget(),
         ],
@@ -26,7 +26,7 @@ class ArticleListItem extends StatelessWidget {
     );
   }
 
-  // 索引Widget
+  // 索引 Widget
   Widget getRankWidget() {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 9),
@@ -38,6 +38,38 @@ class ArticleListItem extends StatelessWidget {
         "No.${item.rank}",
         style: const TextStyle(
             fontSize: 14, color: Color.fromARGB(255, 131, 95, 36)),
+      ),
+    );
+  }
+
+  // 内容展示 Widget
+  Widget getContentWidget() {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start, // 交叉轴
+      children: [
+        avatarWidget(),
+        Expanded(
+          // 占据剩余空间
+          child: Text('2'),
+        ),
+        Text('3'),
+        iconWidget(),
+      ],
+    );
+  }
+
+  // 头像 Widget
+  Widget avatarWidget() {
+    return ClipRRect(
+        borderRadius: BorderRadius.circular(6),
+        child: Image.network(item.author.avatar, width: 60));
+  }
+
+  Widget iconWidget() {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(10, 4, 10, 0),
+      child: const Column(
+        children: [Icon(Icons.search), Text('搜索')],
       ),
     );
   }
