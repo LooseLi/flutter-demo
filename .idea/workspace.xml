@@ -5,6 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4527e08e-ada4-4d1b-be7a-9b876cf3a9d9" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/lib/views/home/components/article_list_item.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/views/home/home.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/views/home/home.dart" afterDir="false" />
     </list>
@@ -28,6 +29,13 @@
         </entry>
       </file>
     </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Dart File" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />

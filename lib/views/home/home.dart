@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/models/home_model.dart';
+import 'package:flutter_demo/views/home/components/article_list_item.dart';
 
 import '../../api/http_request.dart';
 
@@ -49,10 +50,7 @@ class _HomeBodyState extends State<HomeBody> {
       child: ListView.builder(
           itemCount: articleList.length,
           itemBuilder: (BuildContext context, int index) {
-            return ListTile(
-              leading: Image.network(articleList[index].author.avatar),
-              title: Text(articleList[index].content.title),
-            );
+            return ArticleListItem(articleList[index]);
           }),
     );
   }
