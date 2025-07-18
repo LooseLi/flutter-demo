@@ -24,6 +24,8 @@ class HomeBody extends StatefulWidget {
 }
 
 class _HomeBodyState extends State<HomeBody> {
+  List<ArticleItem> articleList = [];
+
   @override
   void initState() {
     super.initState();
@@ -35,17 +37,23 @@ class _HomeBodyState extends State<HomeBody> {
       for (var sub in list) {
         articles.add(ArticleItem.fromMap(sub));
       }
-      print(articles);
+      setState(() {
+        articleList = articles;
+      });
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text(
-        '首页',
-        style: TextStyle(fontSize: 20),
-      ),
+    return Center(
+      child: ListView.builder(
+          itemCount: articleList.length,
+          itemBuilder: (BuildContext context, int index) {
+            return ListTile(
+              leading: Image.network(articleList[index].author.avatar),
+              title: Text(articleList[index].content.title),
+            );
+          }),
     );
   }
 }
