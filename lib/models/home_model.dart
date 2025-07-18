@@ -20,7 +20,7 @@ class Content {
   }
 }
 
-int counter = 0;
+int counter = 1;
 
 class ArticleItem {
   late int rank;

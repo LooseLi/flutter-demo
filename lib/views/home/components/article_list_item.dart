@@ -8,6 +8,37 @@ class ArticleListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(item.content.title);
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: const BoxDecoration(
+          border:
+              Border(bottom: BorderSide(width: 10, color: Color(0xffe2e2e2)))),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          getRankWidget(),
+          const SizedBox(height: 12),
+          Text('2'),
+          const SizedBox(height: 12),
+          Text('3'),
+        ],
+      ),
+    );
+  }
+
+  // 索引Widget
+  Widget getRankWidget() {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 9),
+      // color: Color.fromARGB(255, 238, 205, 144), // 当decoration存在时，color必须移到decoration中，否则会报错
+      decoration: BoxDecoration(
+          color: const Color.fromARGB(255, 238, 205, 144),
+          borderRadius: BorderRadius.circular(3)),
+      child: Text(
+        "No.${item.rank}",
+        style: const TextStyle(
+            fontSize: 14, color: Color.fromARGB(255, 131, 95, 36)),
+      ),
+    );
   }
 }
