@@ -5,9 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4527e08e-ada4-4d1b-be7a-9b876cf3a9d9" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/lib/models/home_model.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flutter_demo.iml" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_demo.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/api/http_config.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/api/http_config.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/api/http_request.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/api/http_request.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/views/home/home.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/views/home/home.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,6 +67,7 @@
     "io.flutter.reload.alreadyRun": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/Users/lisong/Documents/Code/github/flutter_app_demo",
+    "settings.editor.selected.configurable": "reference.settings.ide.settings.notifications",
     "show.migrate.to.gradle.popup": "false"
   }
 }]]></component>

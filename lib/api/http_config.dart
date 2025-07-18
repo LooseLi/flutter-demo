@@ -1,2 +1,2 @@
-const BASE_URL  = "https://douban.uieee.com/v2";
+const BASE_URL = "https://api.juejin.cn/content_api/v1";
 const TIMEOUT = 5000;

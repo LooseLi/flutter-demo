@@ -44,9 +44,12 @@ class MyStackPageState extends State<MyStackPage> {
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
-        selectedFontSize: 14, // 选中字体大小
-        unselectedFontSize: 14, // 未选中字体大小
-        type: BottomNavigationBarType.fixed, // 固定展示
+        selectedFontSize: 14,
+        // 选中字体大小
+        unselectedFontSize: 14,
+        // 未选中字体大小
+        type: BottomNavigationBarType.fixed,
+        // 固定展示
         items: [
           TabBarItem(const Icon(Icons.home), '首页'),
           TabBarItem(const Icon(Icons.category), '分类'),
