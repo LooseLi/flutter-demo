@@ -61,6 +61,10 @@ class _UnitCardStackState extends State<UnitCardStack>
   double dragProgress = 0.0;
   bool isAnimating = false;
 
+  // 滑动手势跟踪变量
+  double _dragStartY = 0.0;
+  double _currentDragY = 0.0;
+
   // 容器高度和卡片高度
   final double containerHeight = 180;
   final double cardHeight = 160;
@@ -90,14 +94,16 @@ class _UnitCardStackState extends State<UnitCardStack>
       if (status == AnimationStatus.completed) {
         setState(() {
           // 动画完成后，更新当前索引并重置进度
-          if (_animationController.value > 0) {
-            // 向下滑动
+          if (dragProgress > 0) {
+            // 向下滑动，显示上一张卡片
             if (currentIndex > 0) {
+              print('Animation completed: Moving to previous card');
               currentIndex--;
             }
-          } else {
-            // 向上滑动
+          } else if (dragProgress < 0) {
+            // 向上滑动，显示下一张卡片
             if (currentIndex < unitData.length - 3) {
+              print('Animation completed: Moving to next card');
               currentIndex++;
             }
           }
@@ -116,60 +122,54 @@ class _UnitCardStackState extends State<UnitCardStack>
     super.dispose();
   }
 
+  // 处理垂直滑动开始
+  void _handleDragStart(DragStartDetails details) {
+    // 记录起始位置，用于判断滑动方向
+    if (isAnimating) return;
+    _dragStartY = details.globalPosition.dy;
+  }
+
   // 处理垂直滑动
   void _handleVerticalDrag(DragUpdateDetails details) {
     if (isAnimating) return;
 
-    setState(() {
-      // 计算拖动进度，限制在-1.0到1.0之间
-      double dragDelta = details.delta.dy / containerHeight;
-      dragProgress += dragDelta;
-      dragProgress = dragProgress.clamp(-1.0, 1.0);
-    });
+    // 只记录滑动方向，不更新UI
+    _currentDragY = details.globalPosition.dy;
   }
 
   // 处理拖动结束
   void _handleDragEnd(DragEndDetails details) {
     if (isAnimating) return;
 
-    if (dragProgress > 0.3) {
-      // 向下滑动超过阈值，显示上一张卡片
-      if (currentIndex > 0) {
-        isAnimating = true;
-        _animationController.value = dragProgress;
-        _animationController.animateTo(1.0);
-      } else {
-        // 已经是第一张，恢复原位
-        _resetPosition();
-      }
-    } else if (dragProgress < -0.3) {
-      // 向上滑动超过阈值，显示下一张卡片
-      if (currentIndex < unitData.length - 3) {
-        isAnimating = true;
-        _animationController.value = -dragProgress;
-        _animationController.animateTo(1.0);
-      } else {
-        // 已经是最后一张，恢复原位
-        _resetPosition();
-      }
-    } else {
-      // 未滑动超过阈值，恢复原位
-      _resetPosition();
-    }
-  }
+    // 判断滑动方向
+    double dragDistance = _currentDragY - _dragStartY;
 
-  // 重置位置
-  void _resetPosition() {
-    setState(() {
-      isAnimating = true;
-      _animationController.value = dragProgress.abs();
-      _animationController.animateTo(0.0).then((_) {
+    // 打印滑动距离，用于调试
+    print('Drag distance: $dragDistance');
+
+    // 只要有明确的方向就触发动画，无需考虑距离大小
+    if (dragDistance < 0) {
+      // 向上滑动，显示下一张卡片
+      if (currentIndex < unitData.length - 1) {
+        // 修改边界条件，确保可以切换到最后一张卡片
+        print('Moving to next card, current index: $currentIndex');
+        // 直接更新索引，不使用动画
         setState(() {
-          dragProgress = 0.0;
-          isAnimating = false;
+          currentIndex++;
+          print('Index updated to: $currentIndex');
         });
-      });
-    });
+      }
+    } else if (dragDistance > 0) {
+      // 向下滑动，显示上一张卡片
+      if (currentIndex > 0) {
+        print('Moving to previous card, current index: $currentIndex');
+        // 直接更新索引，不使用动画
+        setState(() {
+          currentIndex--;
+          print('Index updated to: $currentIndex');
+        });
+      }
+    }
   }
 
   @override
@@ -188,6 +188,7 @@ class _UnitCardStackState extends State<UnitCardStack>
         // 右侧卡片堆叠区域
         Expanded(
           child: GestureDetector(
+            onVerticalDragStart: _handleDragStart,
             onVerticalDragUpdate: _handleVerticalDrag,
             onVerticalDragEnd: _handleDragEnd,
             child: SizedBox(
