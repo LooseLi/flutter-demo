@@ -231,11 +231,12 @@ class _UnitCardStackState extends State<UnitCardStack>
                     rotation = 0.05;
                     opacity = 1.0;
                   } else {
-                    // 其他卡片（堆叠在底部容器后面，不可见）
-                    topPosition = containerHeight * 2.5;
+                    // 第四个及以后的卡片（都堆叠在第三张卡片下方）
+                    topPosition = containerHeight * 1.8 +
+                        dragProgress * containerHeight; // 与第三张卡片位置相同
                     scale = 0.85;
-                    rotation = 0.1;
-                    opacity = relativeIndex == 3 ? 0.5 : 0;
+                    rotation = 0.05;
+                    opacity = 0; // 增加透明度区分
                   }
 
                   // 如果卡片不在可见范围内，不渲染它
@@ -266,11 +267,19 @@ class _UnitCardStackState extends State<UnitCardStack>
                   );
 
                   // 对底部卡片应用裁剪效果
-                  if (relativeIndex == 2) {
-                    // 计算可见比例（0.3-1.0之间）
-                    double visibleFraction =
-                        0.3 + (dragProgress < 0 ? -dragProgress : 0) * 0.7;
-                    visibleFraction = visibleFraction.clamp(0.3, 1.0);
+                  if (relativeIndex >= 2) {
+                    // 计算可见比例
+                    double visibleFraction;
+
+                    if (relativeIndex == 2) {
+                      // 第三张卡片可见比例（0.3-1.0之间）
+                      visibleFraction =
+                          0.3 + (dragProgress < 0 ? -dragProgress : 0) * 0.7;
+                      visibleFraction = visibleFraction.clamp(0.3, 1.0);
+                    } else {
+                      // 第四张及以后的卡片只显示很小一部分
+                      visibleFraction = 0.15;
+                    }
 
                     card = ClipPath(
                       clipper: PartialClipper(visibleFraction),
