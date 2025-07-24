@@ -11,7 +11,7 @@ class Person extends StatelessWidget {
       ),
       body: const Center(
         child: Text(
-          '我的',
+          '动效的研究',
           style: TextStyle(fontSize: 20),
         ),
       ),

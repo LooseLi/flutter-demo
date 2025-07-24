@@ -37,7 +37,7 @@ class MyStackPage extends StatefulWidget {
 }
 
 class MyStackPageState extends State<MyStackPage> {
-  var _currentIndex = 0;
+  var _currentIndex = 2;
 
   @override
   Widget build(BuildContext context) {
