@@ -60,6 +60,7 @@ class _UnitCardStackState extends State<UnitCardStack>
   int currentIndex = 0;
   double dragProgress = 0.0;
   bool isAnimating = false;
+  int _targetIndex = 0; // 动画目标索引
 
   // 滑动手势跟踪变量
   double _dragStartY = 0.0;
@@ -79,35 +80,29 @@ class _UnitCardStackState extends State<UnitCardStack>
       vsync: this,
     );
 
+    // 使用平滑的加减速曲线
     _animation = CurvedAnimation(
       parent: _animationController,
-      curve: Curves.easeOutCubic,
+      curve: Curves.easeInOut,
     );
 
+    // 动画进度监听
     _animationController.addListener(() {
       setState(() {
-        dragProgress = _animation.value;
+        // 更新动画进度，用于卡片位置计算
+        dragProgress =
+            _targetIndex > currentIndex ? -_animation.value : _animation.value;
       });
     });
 
+    // 动画状态监听
     _animationController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         setState(() {
-          // 动画完成后，更新当前索引并重置进度
-          if (dragProgress > 0) {
-            // 向下滑动，显示上一张卡片
-            if (currentIndex > 0) {
-              print('Animation completed: Moving to previous card');
-              currentIndex--;
-            }
-          } else if (dragProgress < 0) {
-            // 向上滑动，显示下一张卡片
-            if (currentIndex < unitData.length - 3) {
-              print('Animation completed: Moving to next card');
-              currentIndex++;
-            }
-          }
+          // 动画完成后，更新当前索引
+          currentIndex = _targetIndex;
 
+          // 重置状态
           dragProgress = 0.0;
           isAnimating = false;
           _animationController.reset();
@@ -120,6 +115,24 @@ class _UnitCardStackState extends State<UnitCardStack>
   void dispose() {
     _animationController.dispose();
     super.dispose();
+  }
+
+  // 启动卡片切换动画
+  void _startAnimation(int targetIndex) {
+    if (targetIndex < 0 || targetIndex >= unitData.length || isAnimating) {
+      return;
+    }
+
+    setState(() {
+      isAnimating = true;
+      _targetIndex = targetIndex;
+
+      // 重置并启动动画
+      _animationController.reset();
+      _animationController.forward();
+
+      print('Starting animation from $currentIndex to $_targetIndex');
+    });
   }
 
   // 处理垂直滑动开始
@@ -151,23 +164,14 @@ class _UnitCardStackState extends State<UnitCardStack>
     if (dragDistance < 0) {
       // 向上滑动，显示下一张卡片
       if (currentIndex < unitData.length - 1) {
-        // 修改边界条件，确保可以切换到最后一张卡片
-        print('Moving to next card, current index: $currentIndex');
-        // 直接更新索引，不使用动画
-        setState(() {
-          currentIndex++;
-          print('Index updated to: $currentIndex');
-        });
+        // 启动到下一张卡片的动画
+        _startAnimation(currentIndex + 1);
       }
     } else if (dragDistance > 0) {
       // 向下滑动，显示上一张卡片
       if (currentIndex > 0) {
-        print('Moving to previous card, current index: $currentIndex');
-        // 直接更新索引，不使用动画
-        setState(() {
-          currentIndex--;
-          print('Index updated to: $currentIndex');
-        });
+        // 启动到上一张卡片的动画
+        _startAnimation(currentIndex - 1);
       }
     }
   }
@@ -196,7 +200,54 @@ class _UnitCardStackState extends State<UnitCardStack>
               child: Stack(
                 children: List.generate(unitData.length, (index) {
                   // 计算相对位置
-                  int relativeIndex = index - currentIndex;
+                  int relativeIndex;
+
+                  // 如果正在动画，需要特殊处理相对索引
+                  if (isAnimating) {
+                    if (_targetIndex > currentIndex) {
+                      // 向上滑动，显示下一张卡片
+                      if (index == currentIndex) {
+                        // 当前卡片正在离开
+                        relativeIndex = 0;
+                      } else if (index == currentIndex + 1) {
+                        // 下一张卡片正在进入
+                        // 使用动画进度影响卡片位置，但保持相对索引为整数
+                        relativeIndex = 1;
+                      } else if (index == currentIndex + 2) {
+                        // 下下张卡片正在上移
+                        relativeIndex = 2;
+                      } else if (index == currentIndex + 3) {
+                        // 再下一张卡片正在显示
+                        relativeIndex = 3;
+                      } else {
+                        // 其他卡片保持原有相对位置
+                        relativeIndex = index - currentIndex;
+                      }
+                    } else {
+                      // 向下滑动，显示上一张卡片
+                      if (index == currentIndex) {
+                        // 当前卡片正在离开
+                        relativeIndex = 0;
+                      } else if (index == currentIndex - 1) {
+                        // 上一张卡片正在进入
+                        relativeIndex = -1;
+                      } else if (index == currentIndex + 1) {
+                        // 下一张卡片正在下移
+                        relativeIndex = 1;
+                      } else if (index == currentIndex + 2) {
+                        // 下下张卡片正在下移
+                        relativeIndex = 2;
+                      } else {
+                        // 其他卡片保持原有相对位置
+                        relativeIndex = index - currentIndex;
+                      }
+                    }
+
+                    // 在卡片位置计算中使用animProgress，而不是在相对索引中
+                  } else {
+                    // 非动画状态，直接计算相对索引
+                    relativeIndex = index - currentIndex;
+                  }
 
                   // 计算卡片位置和变换
                   double topPosition;
@@ -204,18 +255,50 @@ class _UnitCardStackState extends State<UnitCardStack>
                   double rotation;
                   double opacity;
 
+                  // 获取动画进度，用于计算过渡效果
+                  double animProgress = isAnimating ? _animation.value : 0.0;
+
                   if (relativeIndex < 0) {
                     // 已经滚动过的卡片（不可见）
                     topPosition = -containerHeight;
                     scale = 0.8;
                     rotation = -0.1;
                     opacity = 0;
+
+                    // 如果是向下滑动时的上一张卡片，添加过渡动画
+                    if (isAnimating &&
+                        _targetIndex < currentIndex &&
+                        index == currentIndex - 1) {
+                      // 从不可见到可见的过渡
+                      topPosition =
+                          -containerHeight + animProgress * containerHeight;
+                      scale = 0.8 + animProgress * 0.2;
+                      rotation = -0.1 + animProgress * 0.05;
+                      opacity = animProgress;
+                    }
                   } else if (relativeIndex == 0) {
                     // 第一个可见卡片（顶部）
                     topPosition = 0 + dragProgress * containerHeight;
                     scale = 1.0 - dragProgress.abs() * 0.1;
                     rotation = -0.05 - dragProgress * 0.05;
                     opacity = 1.0 - dragProgress.abs() * 0.5;
+
+                    // 如果正在动画，添加过渡效果
+                    if (isAnimating) {
+                      if (_targetIndex > currentIndex) {
+                        // 向上滑动，当前卡片向上移出
+                        topPosition = -animProgress * containerHeight;
+                        scale = 1.0 - animProgress * 0.2;
+                        rotation = -0.05 - animProgress * 0.05;
+                        opacity = 1.0 - animProgress * 0.5;
+                      } else {
+                        // 向下滑动，当前卡片向下移出
+                        topPosition = animProgress * containerHeight;
+                        scale = 1.0 - animProgress * 0.05;
+                        rotation = -0.05 + animProgress * 0.05;
+                        opacity = 1.0 - animProgress * 0.3;
+                      }
+                    }
                   } else if (relativeIndex == 1) {
                     // 第二个可见卡片（中间）
                     topPosition =
@@ -223,6 +306,23 @@ class _UnitCardStackState extends State<UnitCardStack>
                     scale = 0.95 + dragProgress * 0.05;
                     rotation = 0;
                     opacity = 1.0;
+
+                    // 如果正在动画，添加过渡效果
+                    if (isAnimating) {
+                      if (_targetIndex > currentIndex) {
+                        // 向上滑动，中间卡片移到顶部
+                        topPosition = containerHeight * 0.9 -
+                            animProgress * containerHeight * 0.9;
+                        scale = 0.95 + animProgress * 0.05;
+                        rotation = 0 - animProgress * 0.05;
+                      } else {
+                        // 向下滑动，中间卡片移到底部
+                        topPosition = containerHeight * 0.9 +
+                            animProgress * containerHeight * 0.9;
+                        scale = 0.95 - animProgress * 0.05;
+                        rotation = 0 + animProgress * 0.05;
+                      }
+                    }
                   } else if (relativeIndex == 2) {
                     // 第三个可见卡片（底部，部分可见）
                     topPosition =
@@ -230,6 +330,21 @@ class _UnitCardStackState extends State<UnitCardStack>
                     scale = 0.9 + dragProgress * 0.05;
                     rotation = 0.05;
                     opacity = 1.0;
+
+                    // 如果正在动画，添加过渡效果
+                    if (isAnimating) {
+                      if (_targetIndex > currentIndex) {
+                        // 向上滑动，底部卡片移到中间
+                        topPosition = containerHeight * 1.8 -
+                            animProgress * containerHeight * 0.9;
+                        scale = 0.9 + animProgress * 0.05;
+                      } else {
+                        // 向下滑动，底部卡片移出视图
+                        topPosition = containerHeight * 1.8 +
+                            animProgress * containerHeight * 0.5;
+                        scale = 0.9 - animProgress * 0.05;
+                      }
+                    }
                   } else {
                     // 第四个及以后的卡片（都堆叠在第三张卡片下方）
                     topPosition = containerHeight * 1.8 +
@@ -237,6 +352,16 @@ class _UnitCardStackState extends State<UnitCardStack>
                     scale = 0.85;
                     rotation = 0.05;
                     opacity = 0; // 增加透明度区分
+
+                    // 如果是向上滑动时的下一张卡片，添加过渡动画
+                    if (isAnimating &&
+                        _targetIndex > currentIndex &&
+                        index == currentIndex + 3) {
+                      // 从不可见到可见的过渡
+                      topPosition = containerHeight * 2.3 -
+                          animProgress * containerHeight * 0.5;
+                      opacity = 0; // 保持透明
+                    }
                   }
 
                   // 如果卡片不在可见范围内，不渲染它
