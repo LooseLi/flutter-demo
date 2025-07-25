@@ -135,6 +135,50 @@ class _UnitCardStackState extends State<UnitCardStack>
     });
   }
 
+  // 根据动画状态获取卡片内容
+  dynamic _getCardContent(int index, int relativeIndex, String key) {
+    // 如果没有动画，直接返回原始内容
+    if (!isAnimating) {
+      return unitData[index][key];
+    }
+
+    // 如果正在动画，根据相对索引和动画方向选择正确的内容
+    if (_targetIndex > currentIndex) {
+      // 向上滑动，显示下一组卡片
+      if (index == currentIndex) {
+        // 当前卡片正在离开，使用原始内容
+        return unitData[index][key];
+      } else if (index == currentIndex + 1) {
+        // 下一张卡片正在进入，使用下一组内容
+        return unitData[index][key];
+      } else if (index == currentIndex + 2) {
+        // 下下张卡片正在上移，使用下下组内容
+        return unitData[index][key];
+      } else if (index == currentIndex + 3) {
+        // 再下一张卡片正在显示，使用再下一组内容
+        return unitData[index][key];
+      }
+    } else {
+      // 向下滑动，显示上一组卡片
+      if (index == currentIndex) {
+        // 当前卡片正在离开，使用原始内容
+        return unitData[index][key];
+      } else if (index == currentIndex - 1) {
+        // 上一张卡片正在进入，使用上一组内容
+        return unitData[index][key];
+      } else if (index == currentIndex + 1) {
+        // 下一张卡片正在下移，使用原始内容
+        return unitData[index][key];
+      } else if (index == currentIndex + 2) {
+        // 下下张卡片正在下移，使用原始内容
+        return unitData[index][key];
+      }
+    }
+
+    // 其他情况下返回原始内容
+    return unitData[index][key];
+  }
+
   // 处理垂直滑动开始
   void _handleDragStart(DragStartDetails details) {
     // 记录起始位置，用于判断滑动方向
@@ -380,12 +424,18 @@ class _UnitCardStackState extends State<UnitCardStack>
                           ..scale(scale),
                         alignment: Alignment.topCenter,
                         child: UnitCard(
-                          title: unitData[index]['title'],
-                          subtitle: unitData[index]['subtitle'],
-                          backgroundColor: unitData[index]['color'],
-                          unitNumber: unitData[index]['unitNumber'],
-                          totalPages: unitData[index]['totalPages'],
-                          currentPage: unitData[index]['currentPage'],
+                          // 根据动画状态选择正确的数据源
+                          title: _getCardContent(index, relativeIndex, 'title'),
+                          subtitle:
+                              _getCardContent(index, relativeIndex, 'subtitle'),
+                          backgroundColor:
+                              _getCardContent(index, relativeIndex, 'color'),
+                          unitNumber: _getCardContent(
+                              index, relativeIndex, 'unitNumber'),
+                          totalPages: _getCardContent(
+                              index, relativeIndex, 'totalPages'),
+                          currentPage: _getCardContent(
+                              index, relativeIndex, 'currentPage'),
                         ),
                       ),
                     ),
