@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_demo/controller/slider_controller.dart';
 import '../../components/choice_clip.dart';
 
 class Category extends StatefulWidget {
-  const Category({super.key});
+  final SliderController controller;
+
+  const Category({super.key, required this.controller});
 
   @override
   State<Category> createState() => _CategoryState();
@@ -93,17 +96,31 @@ class _CategoryState extends State<Category> {
 
             const SizedBox(height: 24),
 
+            ElevatedButton(
+                onPressed: widget.controller.setMax, child: Text('按钮')),
+
+            const SizedBox(height: 24),
+
             // 内容区域 - 这里可以根据选择的状态显示不同的内容
             Expanded(
-              child: Center(
-                child: Text(
-                  '显示 "$_selectedStatus" 相关内容',
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: Color(0xFF6C757D),
-                  ),
-                ),
-              ),
+              child: AnimatedBuilder(
+                  animation: widget.controller,
+                  builder: (BuildContext context, Widget? child) {
+                    return Container(
+                      alignment: Alignment.center,
+                      color: Colors.orange,
+                      child: Column(
+                        children: [
+                          FlutterLogo(size: widget.controller.value * 100 + 50),
+                          Slider(
+                              value: widget.controller.value,
+                              onChanged: (value) {
+                                widget.controller.onSlider(value);
+                              })
+                        ],
+                      ),
+                    );
+                  }),
             ),
           ],
         ),

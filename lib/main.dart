@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'controller/slider_controller.dart';
 import 'views/home/home.dart';
 import 'views/person/person.dart';
 import 'components/tabbar_item.dart';
@@ -37,7 +38,7 @@ class MyStackPage extends StatefulWidget {
 }
 
 class MyStackPageState extends State<MyStackPage> {
-  var _currentIndex = 2;
+  var _currentIndex = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -63,10 +64,10 @@ class MyStackPageState extends State<MyStackPage> {
       ), // 底部导航栏
       body: IndexedStack(
         index: _currentIndex,
-        children: const <Widget>[
-          Home(),
-          Category(),
-          Person(),
+        children: <Widget>[
+          const Home(),
+          Category(controller: SliderController()),
+          const Person(),
         ],
       ),
     );
