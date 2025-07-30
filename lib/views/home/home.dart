@@ -50,11 +50,13 @@ class _HomeBodyState extends State<HomeBody> {
       children: [
         // 文章列表
         Center(
-          child: ListView.builder(
-              itemCount: articleList.length,
-              itemBuilder: (BuildContext context, int index) {
-                return ArticleListItem(articleList[index]);
-              }),
+          child: Scrollbar(
+            child: ListView.builder(
+                itemCount: articleList.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return ArticleListItem(articleList[index]);
+                }),
+          ),
         ),
       ],
     );
