@@ -103,8 +103,8 @@ class _CategoryState extends State<Category> {
 
             // 内容区域 - 这里可以根据选择的状态显示不同的内容
             Expanded(
-              child: AnimatedBuilder(
-                  animation: widget.controller,
+              child: ListenableBuilder(
+                  listenable: widget.controller,
                   builder: (BuildContext context, Widget? child) {
                     return Container(
                       alignment: Alignment.center,
