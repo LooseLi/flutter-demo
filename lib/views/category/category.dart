@@ -141,64 +141,67 @@ class Category extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final model = context.watch<LogoModel>();
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Card(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Transform.flip(
-                flipX: model.flipX,
-                flipY: model.flipY,
-                child: FlutterLogo(size: model.size),
+    // final model = context.watch<LogoModel>(); // context.watch
+
+    return Consumer<LogoModel>(builder: (context, provider, child) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Transform.flip(
+                  flipX: provider.flipX,
+                  flipY: provider.flipY,
+                  child: FlutterLogo(size: provider.size),
+                ),
               ),
             ),
-          ),
-          Card(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Text('flipX: ${model.flipX}'),
-                      Switch(
-                          value: model.flipX,
-                          onChanged: (value) {
-                            model.flipX = value;
-                          })
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Text('flipY: ${model.flipY}'),
-                      Switch(
-                          value: model.flipY,
-                          onChanged: (value) {
-                            model.flipY = value;
-                          })
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Text('size: ${model.size.ceilToDouble()}'),
-                      Slider(
-                          min: 50,
-                          max: 100,
-                          value: model.size,
-                          onChanged: (value) {
-                            model.size = value;
-                          })
-                    ],
-                  )
-                ],
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Text('flipX: ${provider.flipX}'),
+                        Switch(
+                            value: provider.flipX,
+                            onChanged: (value) {
+                              provider.flipX = value;
+                            })
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text('flipY: ${provider.flipY}'),
+                        Switch(
+                            value: provider.flipY,
+                            onChanged: (value) {
+                              provider.flipY = value;
+                            })
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text('size: ${provider.size.ceilToDouble()}'),
+                        Slider(
+                            min: 50,
+                            max: 100,
+                            value: provider.size,
+                            onChanged: (value) {
+                              provider.size = value;
+                            })
+                      ],
+                    )
+                  ],
+                ),
               ),
-            ),
-          )
-        ],
-      ),
-    );
+            )
+          ],
+        ),
+      );
+    });
   }
 }
