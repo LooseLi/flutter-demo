@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_demo/models/logo_model.dart';
+import 'package:provider/provider.dart';
 
 import 'controller/slider_controller.dart';
 import 'views/home/home.dart';
@@ -42,33 +44,37 @@ class MyStackPageState extends State<MyStackPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        selectedFontSize: 14,
-        // 选中字体大小
-        unselectedFontSize: 14,
-        // 未选中字体大小
-        type: BottomNavigationBarType.fixed,
-        // 固定展示
-        items: [
-          TabBarItem(const Icon(Icons.home), '首页'),
-          TabBarItem(const Icon(Icons.category), '分类'),
-          TabBarItem(const Icon(Icons.person), '我的'),
-        ],
-        onTap: (value) {
-          setState(() {
-            _currentIndex = value;
-          });
-        },
-      ), // 底部导航栏
-      body: IndexedStack(
-        index: _currentIndex,
-        children: <Widget>[
-          const Home(),
-          Category(controller: SliderController()),
-          const Person(),
-        ],
+    return ChangeNotifierProvider(
+      create: (BuildContext context) => LogoModel(),
+      child: Scaffold(
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: _currentIndex,
+          selectedFontSize: 14,
+          // 选中字体大小
+          unselectedFontSize: 14,
+          // 未选中字体大小
+          type: BottomNavigationBarType.fixed,
+          // 固定展示
+          items: [
+            TabBarItem(const Icon(Icons.home), '首页'),
+            TabBarItem(const Icon(Icons.category), '分类'),
+            TabBarItem(const Icon(Icons.person), '我的'),
+          ],
+          onTap: (value) {
+            setState(() {
+              _currentIndex = value;
+            });
+          },
+        ), // 底部导航栏
+        body: IndexedStack(
+          index: _currentIndex,
+          children: const <Widget>[
+            Home(),
+            // Category(controller: SliderController()),
+            Category(),
+            Person(),
+          ],
+        ),
       ),
     );
   }
